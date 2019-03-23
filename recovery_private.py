@@ -221,7 +221,7 @@ def main(publickey):
     time.sleep(1)
     n = pub_key.n
     e = pub_key.e
-    print("\n------key imported successfully------\n")
+    print("\n-------key imported successfully-------\n")
     print("Done\n")
     time.sleep(1)
     print("Attempting Weiner Attack")
@@ -240,15 +240,21 @@ def main(publickey):
             t = FactorDB(n)
             t.connect()
             factors = t.get_factor_list()
+            if t.get_status != 'FF':
+                print("modulus cannot be factored")
+                exit(-1)
             if len(factors) == 2:
                 p = factors[0]
                 q = factors[1]
+            
                 gen_priv(n,e,d,p,q)
             else:
                 p = factors[0]
                 q = n/p
+                
                 gen_priv(n,e,d,p,q)
         else:
+            
             gen_priv(n,e,d,p,q)
 
     elif d == None:
@@ -258,13 +264,18 @@ def main(publickey):
         t = FactorDB(n)
         t.connect()
         factors = t.get_factor_list()
+        if t.get_status != 'FF':
+            print("modulus cannot be factored")
+            exit(-1)
         if len(factors) == 2:
             p = factors[0]
             q = factors[1]
+            
             gen_priv(n,e,d,p,q)
         else:
             p = factors[0]
             q = n/p
+           
             gen_priv(n,e,d,p,q)
     else:   
         print("Nothing worked")
